@@ -7,30 +7,40 @@ import "./App.css";
 
 function App() {
   const [web3, setWeb3] = useState(null);
+  const [account, setAccount]= useState(null);
+  function setAddress(address){
+    setAccount(address);
+  }
   useEffect(() => {
-    const init = async () => {
+    async function init () {
       try {
-        const web3 = new Web3("http://127.0.0.1:7545");
+
+        const web3 = new Web3(new Web3.providers.HttpProvider("HTTP://127.0.0.1:7545"));
+
+
         setWeb3(web3);
+        
         // console.log(state);
       } catch (error) {
         alert("Falied to load web3 or contract.");
         console.log(error);
       }
     };
+    
     init();
+    
   }, []);
   return (
     <div className="Flex">
       <div className="welMargin">
         <Welcome />
       </div>
-      <div className="Account">
-        <Accounts />
+      <div className="Account" >
+        <Accounts web3={web3} setAddress={setAddress} />
       </div>
 
       <div>
-        <SendEther />
+        <SendEther web3={web3} account={account} />
       </div>
     </div>
   );
